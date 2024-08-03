@@ -1,38 +1,311 @@
 .App {
-  text-align: center;
+  width: 100vw;
+  height: 100vh;
 }
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
+@import url('https://fonts.googleapis.com/css2?family=Nunito:ital,wght@0,200..1000;1,200..1000&family=Oswald:wght@200..700&family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap');
+
+*{
+    font-family: "Nunito", sans-serif;
+    user-select: none;
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
+.container{
+    width: 100%;
+    height: 100%; 
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 1rem;
 }
 
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
+.title{
+    font-size: 3rem;
+    font-weight: 1000;
 }
 
-.App-link {
-  color: #61dafb;
+.msg{
+    font-size: 1.25rem;
+    font-weight: 1000;
+    opacity: 0;
 }
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+.msg.result{
+    opacity: 1;
+}
+
+.msg.error{
+    color: red;
+    animation: flicker 1s ease-in-out infinite;
+    opacity: 1;
+}
+
+.msg.cheated{
+    color: red;
+    opacity: 1;
+}
+
+@keyframes flicker {
+    0%{
+        opacity: 0;
+    }
+    50%{
+        opacity: 1;
+    }
+    100%{
+        opacity: 0;
+    }
+}
+
+.game{
+    width: 100%;
+    height: 70%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 5rem;
+}
+
+.settings{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+
+    .timer{
+        font-size: 2rem;
+        font-weight: 750;
+    }
+
+    .difficulty select{
+        border: 2px solid black;
+        cursor: pointer;
+        text-align: center;
+        font-size: 1.25rem;
+        font-weight: 750;
+    }
+
+    .difficulty.invalid{
+        pointer-events: none;
+        select{
+            border-color: gray;
+            color: gray;
+        }
+    }
+
+}
+
+.board{
+    outline: 10px solid black;
+    border-radius: 10px;
+    width: 39.5%;
+    height: 100%;
+    display: flex;
+    flex-wrap: wrap;
+    font-weight: 1000;
+    font-size: 3rem;
+    transition: all 0.3s ease;
+}
+
+.board.invalid{
+    pointer-events: none;
+    color: gray;
+    outline-color: gray;
+    .grid{
+        border-color: gray;
+    }
+    .cell{
+        outline-color: gray;
+    }
+}
+
+.grid{
+    border: 5px solid black;
+    display: flex;
+    flex-wrap: wrap;
+    width: 31.75%;
+    height: 31.75%;
+}
+
+.row{
+    display: flex;
+    width: 100%;
+    height: 33.33%;
+}
+
+.cell{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    outline: 1px solid black;
+    width: 33.33%;
+    height: 100%;
+}
+
+.empty{
+    transition: all 0.1s ease;
+    cursor: pointer;
+}
+
+.empty:hover{
+    background-color: rgb(166, 161, 161);
+    box-shadow: 5px 5px 10px black;
+    transform: scale3d(1.1,1.1,1.1);
+    input{
+        background-color: rgb(166, 161, 161);
+    }
+}
+
+.empty.active{
+    background-color: yellow;
+    input{
+        background-color: yellow;
+    }
+}
+
+.empty.correct{
+    background-color: rgb(81, 248, 81);
+    pointer-events: none;
+    input{
+        background-color: rgb(81, 248, 81);
+    }
+}
+
+.empty.incorrect{
+    background-color: rgb(255, 55, 55);
+    pointer-events: none;
+    input{
+        background-color: rgb(255, 55, 55);
+    }
+}
+
+@keyframes beat {
+    0%{
+        transform: scale3d(1,1,1);
+    }
+    50%{
+        transform: scale3d(1.1,1.1,1.1);
+    }
+    100%{
+        transform: scale3d(1,1,1);
+    }
+}
+
+.empty input[type="number"]{
+    font-weight: 1000;
+    font-size: 3rem;
+    transition: all 0.3s ease;
+    cursor: pointer;
+    text-align: center;
+    width: 80%;
+    height: 80%;
+    outline: none;
+    border: none;
+}
+
+input[type=number]::-webkit-outer-spin-button,
+input[type=number]::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+input[type=number] {
+    -moz-appearance: textfield;
+}
+
+.buttons{
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    text-align: center;
+    div{
+        border: 2px solid black;
+        border-radius: 5px;
+        padding: 3px;
+        transition: all 0.3s ease;
+    }
+    button{
+        cursor: pointer;
+        font-size: 1.5rem;
+        font-weight: 750;
+        border: none;
+        background: none;
+    }
+}
+
+.reset:hover{
+    background-color: rgb(255, 55, 55);
+    transform: scale3d(1.1,1.1,1.1);
+}
+
+.help:hover{
+    background-color: rgb(63, 181, 255);
+    transform: scale3d(1.1,1.1,1.1);
+}
+
+.solve:hover{
+    background-color: rgb(81, 248, 81);
+    transform: scale3d(1.1,1.1,1.1);
+}
+
+.help.invalid,.reset.invalid,.solve.invalid{
+    pointer-events: none;
+    div{
+        border: 2px solid gray;
+    }
+    button{
+        color: gray;
+    }
+}
+
+.start{
+    margin-top: 1rem;
+    display: flex;
+    gap: 1rem;
+    button{
+        padding: 5px;
+        font-size: 1.25rem;
+        font-weight: 750;
+        border: none;
+        background: none;
+        border: 2px solid black;
+        border-radius: 10px;
+        transition: all 0.3s ease;
+        cursor: pointer;
+    }
+}
+
+.start button:hover{
+    background-color: black;
+    color: white;
+}
+
+.start button.invalid{
+    background: none;
+    pointer-events: none;
+    border-color: gray;
+    color: gray;
+}
+
+@media (max-width: 900px) {
+
+    .board{
+        width: 70%;
+        height: 90%;
+    }
+
+    .grid{
+        width: 31.54%;
+        height: 32%;
+    }
+
+    .game{
+        gap: 2rem;
+    }
+
+    .start{
+        margin-top: 0;
+    }
+
 }
